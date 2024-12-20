@@ -14,6 +14,7 @@ public class GeneralService {
     @Autowired
     private JsonLoader jsonLoader;
     public boolean setBaseConfig(ConditionDTO conditionDTO) {
+        // the method is too long should short it for further purpose
         System.out.println(conditionDTO);
         //load config file
         baseConfig = jsonLoader.getBaseConfig();
