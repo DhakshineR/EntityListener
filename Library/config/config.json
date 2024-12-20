@@ -1,0 +1,130 @@
+{
+  "Entities" : [ {
+    "Name" : "WorkOrder",
+    "Insertion" : {
+      "OnInsertion" : "Yes",
+      "RowwiseConditions" : [ {
+        "ColumnName" : "startDate",
+        "Conditions" : [ {
+          "Check" : "actualStartDate>=startDate",
+          "delay in min" : "10",
+          "checkOnce" : "Yes",
+          "groupName" : "WorkOrderStartDateGroup",
+          "sourceType" : "Generic",
+          "subscriber": "dispatcher"
+        } ]
+      } ]
+    },
+    "Updation" : {
+      "OnUpdation" : "Yes",
+      "ColumnwiseConditions" : [ {
+        "ColumnName" : "actualEndDate",
+        "Conditions" : [ {
+          "Check" : "actualEndDate>=endDate",
+          "delay in min" : "",
+          "checkOnce" : "Yes",
+          "groupName" : "WorkOrderEndDateGroup",
+          "sourceType" : "Generic",
+          "subscriber": "dispatcher"
+        } ]
+      }, {
+        "ColumnName" : "approvalStatus",
+        "Conditions" : [ {
+          "Check" : "Requested,Approved/Reject",
+          "delay in min" : "15",
+          "checkOnce" : "No",
+          "groupName" : "WorkOrderApprovalStatusGroup",
+          "sourceType" : "Generic",
+          "subscriber": "dispatcher"
+        } ]
+      }, {
+        "ColumnName" : "workOrderStatus",
+        "Conditions" : [ {
+          "Check" : "workOrderStatus.id==28",
+          "delay in min" : "60",
+          "checkOnce" : "No",
+          "groupName" : "WorkOrderStatusPendingGroup",
+          "sourceType" : "Generic",
+          "subscriber": "dispatcher"
+        }, {
+          "Check" : "Any,workOrderStatus.id==548",
+          "delay in min" : "",
+          "checkOnce" : "Yes",
+          "groupName" : "WorkOrderStatusFieldCompleteGroup",
+          "sourceType" : "Generic",
+          "subscriber": "dispatcher"
+        } ]
+      } ]
+    }
+  }, {
+    "Name" : "WorkOrderCrew",
+    "Insertion" : {
+      "OnInsertion" : "Yes",
+      "RowwiseConditions" : [ {
+        "ColumnName" : "workOrder",
+        "Conditions" : [ {
+          "Check" : "workOrder.priority.codeDisplayText==Critical",
+          "delay in min" : "",
+          "checkOnce" : "Yes",
+          "groupName" : "WorkOrderCrewPriorityGroup",
+          "sourceType" : "Generic",
+          "subscriber": "crew"
+        } ]
+      } ]
+    },
+    "Updation" : {
+      "OnUpdation" : "Yes",
+      "ColumnwiseConditions" : [ {
+        "ColumnName" : "isAccepted",
+        "Conditions" : [ {
+          "Check" : "0,1",
+          "delay in min" : "15",
+          "checkOnce" : "No",
+          "groupName" : "WorkOrderCrewAcceptedGroup",
+          "sourceType" : "Generic",
+          "subscriber": "workOrder.dispatcher"
+        } ]
+      } ]
+    }
+  }, {
+    "Name" : "WorkOrderRequests",
+    "Insertion" : {
+      "OnInsertion" : "Yes",
+      "RowwiseConditions" : [ {
+        "ColumnName" : "requestPriority",
+        "Conditions" : [ {
+          "Check" : "requestPriority.codeDisplayText==High",
+          "delay in min" : "",
+          "checkOnce" : "Yes",
+          "groupName" : "WorkOrderRequestPriorityGroup",
+          "sourceType" : "Generic",
+          "subscriber": "workOrder.dispatcher"
+        } ]
+      } ]
+    },
+    "Updation" : {
+      "OnUpdation" : "Yes",
+      "ColumnwiseConditions" : [ {
+        "ColumnName" : "requestStatus",
+        "Conditions" : [ {
+          "Check" : "Any,Any",
+          "delay in min" : "",
+          "checkOnce" : "No",
+          "groupName" : "WorkOrderRequestStatusGroup",
+          "sourceType" : "Generic",
+          "subscriber": "crew"
+        } ]
+      }, {
+        "ColumnName" : "actionStatus",
+        "Conditions" : [ {
+          "Check" : "Any,Any",
+          "delay in min" : "",
+          "checkOnce" : "No",
+          "groupName" : "WorkOrderRequestActionStatusGroup",
+          "sourceType" : "Generic",
+          "subscriber": "crew"
+        } ]
+      } ]
+    }
+  } ]
+}
