@@ -54,6 +54,7 @@ public class NotificationService {
 
             // Make the API call
             ResponseEntity<NotificationResponse> response = restTemplate.postForEntity(apiUrl, entity, NotificationResponse.class);
+            //getting issue with the ssl certificate here
 
             // Check the response status and handle it
             if (response.getStatusCode().is2xxSuccessful()) {
